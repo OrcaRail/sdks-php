@@ -1,0 +1,42 @@
+{
+    "name": "orcarail/orcarail-php",
+    "description": "Official PHP SDK for the OrcaRail API",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/OrcaRail/sdks-php",
+    "support": {
+        "issues": "https://github.com/OrcaRail/sdks-php/issues",
+        "source": "https://github.com/OrcaRail/sdks-php"
+    },
+    "require": {
+        "php": "^8.1",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpstan/phpstan": "^1.12 || ^2.0",
+        "phpunit/phpunit": "^10.5 || ^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "OrcaRail\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OrcaRail\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "analyse": "phpstan analyse",
+        "cs-check": "php-cs-fixer check --diff"
+    },
+    "config": {
+        "platform": {
+            "php": "8.1.0"
+        },
+        "sort-packages": true
+    }
+}
