@@ -1,6 +1,6 @@
 # OrcaRail PHP SDK
 
-The official PHP 8.1+ client for the OrcaRail API.
+The official PHP 8.1+ client for the OrcaRail API. Tested on PHP 8.1–8.4.
 
 ```bash
 composer require orcarail/orcarail-php
