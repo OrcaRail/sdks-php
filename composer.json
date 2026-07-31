@@ -38,5 +38,12 @@
             "php": "8.1.0"
         },
         "sort-packages": true
-    }
+    },
+    "repositories": [{
+        "packagist.org": false
+    },{
+        "name": "private-packagist",
+        "type": "composer",
+        "url": "https://repo.packagist.com/orcarail/"
+    }]
 }
