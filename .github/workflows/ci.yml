@@ -16,12 +16,6 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: none
-      # CI has no credentials for repo.packagist.com, so resolve dependencies
-      # from public packagist.org instead of the private mirror.
-      - name: Use public Packagist in CI
-        run: |
-          jq 'del(.repositories)' composer.json > composer.tmp && mv composer.tmp composer.json
-          rm -f composer.lock
       - uses: ramsey/composer-install@v3
       - run: composer test
       - run: composer analyse
