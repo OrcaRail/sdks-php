@@ -5,3 +5,6 @@
 .DS_Store
 .idea/
 .vscode/
+
+# Graphify generated knowledge graph
+graphify-out/
