@@ -36,6 +36,20 @@ $event = \OrcaRail\Webhook::constructEvent(
 );
 ```
 
+## Live vs sandbox
+
+Sandbox organizations (created with **Go to sandbox** in the dashboard) are testnet-only and issue `ak_test_` / `sk_test_` keys. Live organizations use `ak_live_` / `sk_live_`.
+
+```php
+// Sandbox only: complete a payment without a wallet (fires the usual webhooks)
+$orcarail->paymentIntents->simulate($intent->id);
+
+// Webhook events carry livemode: never fulfill real orders from sandbox events
+if ($event->livemode === false) {
+    // test event from a sandbox organization
+}
+```
+
 ## Documentation
 
 - [PHP SDK guide](https://docs.orcarail.com/docs/integration/php-sdk/)
