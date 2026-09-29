@@ -42,6 +42,16 @@ final class PaymentIntentService extends AbstractService
         return $this->requestObject('POST', 'payment_intents/' . $this->segment($id) . '/complete', []);
     }
 
+    /**
+     * Sandbox only: complete a payment without an on-chain transfer (no wallet needed).
+     * Fires the usual webhooks with livemode false. Requires a sandbox (ak_test_) key;
+     * the API returns 403 SIMULATION_SANDBOX_ONLY for live organizations.
+     */
+    public function simulate(string $id): OrcaRailObject
+    {
+        return $this->requestObject('POST', 'payment_intents/' . $this->segment($id) . '/simulate', []);
+    }
+
     /** @param array<string, mixed> $params */
     public function update(string $id, array $params): OrcaRailObject
     {

@@ -32,6 +32,7 @@ final class ServiceTest extends TestCase
             ['id' => 'confirmed'],
             ['id' => 'completed'],
             ['id' => 'updated'],
+            ['id' => 'simulated'],
         );
         $service = (new OrcaRailClient(['http_client' => $transport]))->paymentIntents;
         $service->create([
@@ -44,6 +45,7 @@ final class ServiceTest extends TestCase
         $service->confirm('pi_1', ['client_secret' => 'secret', 'return_url' => 'https://example.com']);
         $service->complete('pi_1');
         $service->update('pi_1', ['description' => 'updated']);
+        $service->simulate('pi_1');
 
         self::assertIsArray($transport->requests[0]['body']);
         self::assertSame(['crypto'], $transport->requests[0]['body']['payment_method_types']);
@@ -52,6 +54,7 @@ final class ServiceTest extends TestCase
         self::assertSame('payment_intents/pi_1/confirm', $transport->requests[2]['path']);
         self::assertSame('payment_intents/pi_1/complete', $transport->requests[3]['path']);
         self::assertSame('PATCH', $transport->requests[4]['method']);
+        self::assertSame('payment_intents/pi_1/simulate', $transport->requests[5]['path']);
     }
 
     public function testPaymentIntentCreateAcceptsPriceAndRejectsInvalidUnions(): void

@@ -8,6 +8,7 @@ use OrcaRail\Exception\ApiException;
 use OrcaRail\Exception\AuthenticationException;
 use OrcaRail\Exception\TransportException;
 use OrcaRail\HttpClient\CurlClient;
+use OrcaRail\Version;
 use PHPUnit\Framework\TestCase;
 
 final class HttpClientTest extends TestCase
@@ -31,7 +32,7 @@ final class HttpClientTest extends TestCase
         self::assertSame('POST', $captured['method']);
         self::assertSame('https://api.example.test/v1/payment_intents', $captured['url']);
         self::assertContains('Authorization: Basic ' . base64_encode('pk_test:sk_test'), $captured['headers']);
-        self::assertContains('User-Agent: orcarail-php/1.0.0', $captured['headers']);
+        self::assertContains('User-Agent: orcarail-php/' . Version::VERSION, $captured['headers']);
         self::assertSame('{"amount":"10"}', $captured['body']);
         self::assertSame(1234, $captured['timeout']);
         self::assertSame(456, $captured['connect_timeout']);
