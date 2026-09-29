@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.1.0 - 2026-09-29
+
 - `paymentIntents->simulate($id)`: sandbox only, completes a payment without an
   on-chain transfer.
 - Documented `livemode` on webhook events (false for sandbox organizations).
