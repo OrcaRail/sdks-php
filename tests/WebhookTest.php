@@ -53,4 +53,37 @@ final class WebhookTest extends TestCase
         $this->expectException(SignatureVerificationException::class);
         Webhook::constructEvent($payload, $signature, 'secret');
     }
+
+    public function testConstructsEventFromFreshTimestampedSignature(): void
+    {
+        $payload = '{"type":"payment_intent.completed"}';
+        $now = 1700000000;
+        $signature = hash_hmac('sha256', ($now - 10) . '.' . $payload, 'secret');
+
+        $event = Webhook::constructEventFromHeaders($payload, (string) ($now - 10), $signature, 'secret', 300, $now);
+        self::assertSame('payment_intent.completed', $event->type);
+    }
+
+    public function testRejectsReplayedTimestampedDelivery(): void
+    {
+        $payload = '{"type":"payment_intent.completed"}';
+        $now = 1700000000;
+        $old = $now - 301;
+        $signature = hash_hmac('sha256', $old . '.' . $payload, 'secret');
+
+        self::assertFalse(WebhookSignature::verifyTimestamped($payload, (string) $old, $signature, 'secret', 300, $now));
+        $this->expectException(SignatureVerificationException::class);
+        Webhook::constructEventFromHeaders($payload, (string) $old, $signature, 'secret', 300, $now);
+    }
+
+    public function testRejectsChangedTimestampOrMissingHeaders(): void
+    {
+        $payload = '{"type":"payment_intent.completed"}';
+        $now = 1700000000;
+        $signature = hash_hmac('sha256', ($now - 3600) . '.' . $payload, 'secret');
+
+        self::assertFalse(WebhookSignature::verifyTimestamped($payload, (string) $now, $signature, 'secret', 300, $now));
+        self::assertFalse(WebhookSignature::verifyTimestamped($payload, '', $signature, 'secret', 300, $now));
+        self::assertFalse(WebhookSignature::verifyTimestamped($payload, (string) $now, '', 'secret', 300, $now));
+    }
 }
