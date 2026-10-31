@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## 1.2.1 - 2026-10-31
+
+- Docs: `paymentIntents->complete($id)` is required once the customer returns to
+  your `return_url`. Until it is called, a paid intent stays `processing`, the
+  payment is not final or withdrawable and no `payment_intent.completed` webhook
+  is sent.
+
 ## 1.2.0 - 2026-10-24
 
 - `WebhookSignature::verifyTimestamped()` and `Webhook::constructEventFromHeaders()`:

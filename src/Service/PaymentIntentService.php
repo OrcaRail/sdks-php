@@ -37,6 +37,13 @@ final class PaymentIntentService extends AbstractService
         return $this->requestObject('POST', 'payment_intents/' . $this->segment($id) . '/confirm', $params, true);
     }
 
+    /**
+     * Required: call from your backend when the customer returns to your return_url
+     * (`?payment_intent=<id>`). OrcaRail keeps a paid intent `processing` until it is
+     * completed; until then the payment is not final, never withdrawn and no
+     * `payment_intent.completed` webhook is sent. Returns `completed` once the payment
+     * is confirmed on-chain; while it is still `processing`, call it again later.
+     */
     public function complete(string $id): OrcaRailObject
     {
         return $this->requestObject('POST', 'payment_intents/' . $this->segment($id) . '/complete', []);

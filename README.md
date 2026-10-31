@@ -22,6 +22,19 @@ $intent = $orcarail->paymentIntents->create([
 echo $intent->id;
 ```
 
+When the customer returns to your `return_url` (`?payment_intent=<id>`), complete
+the intent from your backend. This is required: OrcaRail keeps a paid intent
+`processing` until it is completed, and until then the payment is not final, is
+never withdrawn and no `payment_intent.completed` webhook is sent. While the payment
+is still unconfirmed it returns `processing`; call it again later.
+
+```php
+$intent = $orcarail->paymentIntents->complete($_GET['payment_intent']);
+if ($intent->status === 'completed') {
+    // fulfill the order
+}
+```
+
 Services are exposed lazily as `paymentIntents`, `subscriptions`, `pay`,
 `rates`, `products`, and `prices`. API responses are `OrcaRailObject` values
 that support both property and array access.
