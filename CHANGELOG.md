@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## 1.3.0 - 2026-11-02
+
+- Added `WebhookEventType` cases for subscription events the API sends:
+  `SubscriptionCollectionMethodUpdated`, `SubscriptionPayerWalletVerified`,
+  `SubscriptionAutoChargeAllowanceInsufficient`,
+  `SubscriptionAutoChargeCanceledInsufficientAllowance` and
+  `SubscriptionAutoChargeCanceledInsufficientBalance`. Before, `tryFrom()`
+  returned `null` for them.
+- Deprecated `SubscriptionTrialWillEnd`, `SubscriptionPastDue` and
+  `SubscriptionCompleted`: the API never sends these events. They stay so
+  existing `match` arms keep working. A failed auto-charge sends
+  `subscription.payment_link.payment_failed` (payload `status: "past_due"`) or
+  `subscription.auto_charge.allowance_insufficient`.
+
 ## 1.2.1 - 2026-10-31
 
 - Docs: `paymentIntents->complete($id)` is required once the customer returns to

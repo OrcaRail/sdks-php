@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OrcaRail\Tests;
 
+use OrcaRail\Enum\WebhookEventType;
 use OrcaRail\Exception\SignatureVerificationException;
 use OrcaRail\Webhook;
 use OrcaRail\WebhookSignature;
@@ -85,5 +86,41 @@ final class WebhookTest extends TestCase
         self::assertFalse(WebhookSignature::verifyTimestamped($payload, (string) $now, $signature, 'secret', 300, $now));
         self::assertFalse(WebhookSignature::verifyTimestamped($payload, '', $signature, 'secret', 300, $now));
         self::assertFalse(WebhookSignature::verifyTimestamped($payload, (string) $now, '', 'secret', 300, $now));
+    }
+
+    public function testEnumCoversEveryEventTheApiSends(): void
+    {
+        foreach (self::eventTypesSentByApi() as $type) {
+            self::assertSame($type, WebhookEventType::from($type)->value);
+        }
+    }
+
+    /**
+     * Event types the OrcaRail API dispatches to merchant webhooks.
+     *
+     * @return list<string>
+     */
+    private static function eventTypesSentByApi(): array
+    {
+        return [
+            'payment_intent.completed',
+            'payment_intent.processing',
+            'payment_intent.canceled',
+            'payment_intent.requires_payment_method',
+            'payment_intent.requires_confirmation',
+            'subscription.created',
+            'subscription.updated',
+            'subscription.canceled',
+            'subscription.paused',
+            'subscription.resumed',
+            'subscription.collection_method.updated',
+            'subscription.payer_wallet.verified',
+            'subscription.payment_link.created',
+            'subscription.payment_link.paid',
+            'subscription.payment_link.payment_failed',
+            'subscription.auto_charge.allowance_insufficient',
+            'subscription.auto_charge.canceled_insufficient_allowance',
+            'subscription.auto_charge.canceled_insufficient_balance',
+        ];
     }
 }
