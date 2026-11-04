@@ -40,8 +40,17 @@ abstract class AbstractService
         return $response;
     }
 
+    /**
+     * One URL path segment from a caller-supplied id or slug. Ids often come from request input,
+     * and rawurlencode() leaves "." and ".." unchanged (curl then removes them), so values that
+     * would change the request path are refused instead of sent.
+     */
     protected function segment(string $value): string
     {
+        if (trim($value) === '' || $value === '.' || $value === '..' || strpbrk($value, "/\\?#\0") !== false) {
+            throw new \InvalidArgumentException('An id or slug must be a single URL path segment.');
+        }
+
         return rawurlencode($value);
     }
 

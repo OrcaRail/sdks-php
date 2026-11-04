@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Security: service methods now throw `InvalidArgumentException` for an id or slug that would
+  change the request path (empty or blank, `.`, `..`, or containing `/`, `\`, `?`, `#` or NUL),
+  before sending anything. Previously `$orcarail->prices->deactivate($org, '..')` became
+  `DELETE /organizations/{org}`.
+
 ## 1.3.0 - 2026-11-02
 
 - Added `WebhookEventType` cases for subscription events the API sends:
