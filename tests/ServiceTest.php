@@ -17,11 +17,11 @@ final class ServiceTest extends TestCase
         $client = new OrcaRailClient(['http_client' => $transport]);
 
         self::assertSame($client->paymentIntents, $client->paymentIntents);
-        $intent = $client->paymentIntents->retrieve('pi/1');
+        $intent = $client->paymentIntents->retrieve('pi 1');
 
         self::assertSame('pi_1', $intent->id);
         self::assertSame(7, $intent['nested']->value);
-        self::assertSame('payment_intents/pi%2F1', $transport->requests[0]['path']);
+        self::assertSame('payment_intents/pi%201', $transport->requests[0]['path']);
     }
 
     public function testPaymentIntentRoutesDefaultsAndAuthenticatedConfirm(): void
@@ -119,24 +119,24 @@ final class ServiceTest extends TestCase
             ['id' => 'price_1'],
         );
         $client = new OrcaRailClient(['http_client' => $transport]);
-        $client->pay->get('pay/slug');
-        $client->pay->cancel('pay/slug');
+        $client->pay->get('pay slug');
+        $client->pay->cancel('pay slug');
         $client->rates->getFiatQuote(['amount' => '10 00', 'currency' => 'IR/R']);
         self::assertSame('usd', $client->rates->getCurrencies(['active' => true])[0]->code);
-        self::assertCount(1, $client->products->all('org/1'));
-        $client->products->create('org/1', ['name' => 'Product']);
-        $client->products->update('org/1', 'prod/1', ['active' => false]);
-        $client->products->delete('org/1', 'prod/1');
-        self::assertCount(1, $client->prices->all('org/1', ['active' => true, 'recurring' => false]));
-        $client->prices->create('org/1', ['product' => 'prod_1']);
-        $client->prices->update('org/1', 'price/1', ['active' => false]);
-        $client->prices->deactivate('org/1', 'price/1');
+        self::assertCount(1, $client->products->all('org 1'));
+        $client->products->create('org 1', ['name' => 'Product']);
+        $client->products->update('org 1', 'prod 1', ['active' => false]);
+        $client->products->delete('org 1', 'prod 1');
+        self::assertCount(1, $client->prices->all('org 1', ['active' => true, 'recurring' => false]));
+        $client->prices->create('org 1', ['product' => 'prod_1']);
+        $client->prices->update('org 1', 'price 1', ['active' => false]);
+        $client->prices->deactivate('org 1', 'price 1');
 
-        self::assertSame('pay/pay%2Fslug', $transport->requests[0]['path']);
+        self::assertSame('pay/pay%20slug', $transport->requests[0]['path']);
         self::assertStringContainsString('amount=10%200', $transport->requests[2]['path']);
         self::assertSame('rates/currencies?active=true', $transport->requests[3]['path']);
         self::assertStringContainsString('active=true&recurring=false', $transport->requests[8]['path']);
-        self::assertSame('organizations/org%2F1/prices/price%2F1', $transport->requests[11]['path']);
+        self::assertSame('organizations/org%201/prices/price%201', $transport->requests[11]['path']);
     }
 
     public function testOneTimePriceHelpersFindReuseAndCreate(): void
